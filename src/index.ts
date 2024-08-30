@@ -8,12 +8,16 @@ pairs.set('<', '>')
 pairs.set('"', '"')
 pairs.set("'", "'")
 pairs.set('`', '`')
+pairs.set('x', 'y') // Added new pair 'x' and 'y'
 
 export async function activate(context: ExtensionContext): Promise<void> {
   let { subscriptions } = context
   const config = workspace.getConfiguration('pairs')
   const disableLanguages = config.get<string[]>('disableLanguages')
   const characters = config.get<string[]>('enableCharacters')
+  if (!characters.includes('x')) {
+    characters.push('x') // Ensure 'x' is included in the characters array
+  }
   let enableBackspace = config.get<boolean>('enableBackspace')
   if (enableBackspace) {
     let map = await workspace.nvim.call('maparg', ['<bs>', 'i']) as string
